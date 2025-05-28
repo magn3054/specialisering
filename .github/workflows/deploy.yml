@@ -1,0 +1,36 @@
+name: Deploy to Simply.com
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get latest code
+      uses: actions/checkout@v4
+
+    # - name: Use Node.js latest
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     check-latest: true
+      
+    # - name: Build Project   ## Det er her den fejler
+    #   run: |
+    #     npm install
+    #     npm run build
+    
+    # - name: List output files
+    #   run: find dist/ -print
+      
+    - name: Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/ # Path to your code in the repository.
+          server-dir:  filosofus/ # Path to the directory on my Simply.com server.
