@@ -1,11 +1,30 @@
 import { useEffect, useState } from "react";
+import filosofusOpen from "../assets/filosofus-open.svg";
+import filosofusClosed from "../assets/filosofus-closed.svg";
+import lunaOpen from "../assets/luna-open.svg";
+import lunaClosed from "../assets/luna-closed.svg";
+import logonOpen from "../assets/logon-open.svg";
+import logonClosed from "../assets/logon-closed.svg";
+
+const characterImages = {
+  filosofus: {
+    open: filosofusOpen,
+    closed: filosofusClosed,
+  },
+  luna: {
+    open: lunaOpen,
+    closed: lunaClosed,
+  },
+  logon: {
+    open: logonOpen,
+    closed: logonClosed,
+  },
+};
 
 export default function CharacterTalker({
   baseName, // fx. "filosofus"
   isTalking = false,
   interval = 150,
-  // size = 10,
-  path = "/src/assets/"
 }) {
   const [showOpen, setShowOpen] = useState(false);
 
@@ -21,11 +40,11 @@ export default function CharacterTalker({
     return () => clearInterval(timer);
   }, [isTalking, interval]);
 
-  const imageSrc = `${path}${baseName}-${showOpen ? "open" : "closed"}.svg`;
+  const talkerSrc = characterImages[baseName]?.[showOpen ? "open" : "closed"];
 
   return (
     <img
-      src={imageSrc}
+      src={talkerSrc}
       alt={`${baseName} talking`}
       width={"100%"}
       height={"100%"}
