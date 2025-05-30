@@ -6,9 +6,9 @@ import Style from "./views/DefaultPage.module.css";
 function Layout() {
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <Outlet />
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 }

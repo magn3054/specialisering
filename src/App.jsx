@@ -3,6 +3,7 @@ import Layout from "./Layout";
 import NotFound from "./views/NotFound";
 import "./App.css";
 import DefaultPage from "./views/DefaultPage";
+import Scene2 from "./views/Scene2";
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <DefaultPage />,
+      },
+      {
+        path: "scene2",
+        element: <Scene2 />,
       },
       {
         path: "*",

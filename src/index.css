@@ -1,5 +1,13 @@
+@font-face {
+  font-family: 'myFont';
+  src: url('public/fonts/beautiful_valentine.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "myFont", sans-serif;
+  letter-spacing: 0.15rem;
 }
 
 * {
