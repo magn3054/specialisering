@@ -55,21 +55,3 @@ export default function CharacterTalker({
     />
   );
 }
-
-
-
-// const handleTalk = (name, duration = 3) => {
-//     setTalkingStates(prev => ({
-//         ...prev,
-//         [name]: true
-//     }));
-
-//     setTimeout(() => {
-//         setTalkingStates(prev => ({
-//             ...prev,
-//             [name]: false
-//         }));
-//     }, duration * 1000);
-// };
-
-

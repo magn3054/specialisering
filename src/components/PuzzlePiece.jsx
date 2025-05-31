@@ -1,6 +1,6 @@
 import { useDrag } from "react-dnd";
 
-export default function PuzzlePiece({ id, image, alt, position, isInDropZone = false }) {
+export default function PuzzlePiece({ id, image, alt, position, widthStart=60, isInDropZone = false }) {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "puzzlePiece",
         item: { id },
@@ -15,7 +15,9 @@ export default function PuzzlePiece({ id, image, alt, position, isInDropZone = f
         top: isInDropZone ? undefined : position.y,
         opacity: isDragging ? 0.5 : 1,
         cursor: "grab",
-        width: "60px",
+        // width: `${width}px`,
+        width: widthStart,
+        height: "100%",
         pointerEvents: isDragging ? "none" : "auto", // prevents ghosting
     };
 

@@ -1,5 +1,5 @@
 import style from "./Scene2.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import CharacterTalker from "../components/CharacterTalker.jsx";
 
@@ -21,15 +21,12 @@ export default function DestinationPage() {
 
     const handleDrop = (pieceId, shadowId) => {
         setPlacedPieces(prev => {
-            // Remove from any existing slot
             const updated = Object.fromEntries(
                 Object.entries(prev).filter(([_, val]) => val !== pieceId)
             );
 
-            // If dropped in source, don't place it anywhere
             if (shadowId === "source") return updated;
 
-            // Place in new slot
             return {
                 ...updated,
                 [shadowId]: pieceId
@@ -45,22 +42,45 @@ export default function DestinationPage() {
         luna: false
     });
     const dropZonePositions = [
-        { x: 125, y: 200 }, // venstre øre
-        { x: 210, y: 200 }, // Højre øre
-        { x: 165, y: 250 }, // kat top
-        { x: 145, y: 260 }, // venstre øje
-        { x: 190, y: 260 }, // højre øje
-        { x: 165, y: 300 }, // kat bund
+        { id: "leftEar", x: "32vw", y: "30vh" },
+        { id: "rightEar", x: "52vw", y: "30vh" },
+        { id: "topPiece", x: "31vw", y: "37vh" },
+        { id: "bottomPiece", x: "31vw", y: "47vh" },
+        { id: "leftEye", x: "41vw", y: "36vh" },
+        { id: "rightEye", x: "52vw", y: "36vh" },
     ];
 
     const pieceData = [ // start positioner
-        { id: "leftEar", image: leftEar, position: { x: 100, y: 500 }, alt: "Left Ear" },
-        { id: "rightEar", image: rightEar, position: { x: 175, y: 500 }, alt: "Right Ear" },
-        { id: "topPiece", image: topPiece, position: { x: 100, y: 600 }, alt: "Top Piece" },
-        { id: "bottomPiece", image: bottomPiece, position: { x: 160, y: 600 }, alt: "Bottom Piece" },
-        { id: "leftEye", image: leftEye, position: { x: 175, y: 400 }, alt: "Left Eye" },
-        { id: "rightEye", image: rightEye, position: { x: 100, y: 400 }, alt: "Right Eye" },
+        { id: "leftEar", image: leftEar, position: { x: "20vw", y: "45vh" }, alt: "Left Ear", widthS: 60 },
+        { id: "rightEar", image: rightEar, position: { x: "5vw", y: "35vh" }, alt: "Right Ear", width: 60 },
+        { id: "topPiece", image: topPiece, position: { x: "5vw", y: "45vh" }, alt: "Top Piece", width: 150 },
+        { id: "bottomPiece", image: bottomPiece, position: { x: "20vw", y: "25vh" }, alt: "Bottom Piece", width: 150 },
+        { id: "leftEye", image: leftEye, position: { x: "20vw", y: "35vh" }, alt: "Left Eye", width: 25 },
+        { id: "rightEye", image: rightEye, position: { x: "5vw", y: "25vh" }, alt: "Right Eye", width: 25 },
     ];
+
+    const correctPlacement = {
+        slot0: "leftEar",
+        slot1: "rightEar",
+        slot2: "topPiece",
+        slot3: "bottomPiece",
+        slot4: "rightEye",
+        slot5: "leftEye",
+    };
+
+    const checkIfPuzzleIsSolved = (placed) => {
+        return Object.entries(correctPlacement).every(
+            ([slot, pieceId]) => placed[slot] === pieceId
+        );
+    };
+
+    useEffect(() => {
+        if (Object.keys(placedPieces).length === Object.keys(correctPlacement).length) {
+            if (checkIfPuzzleIsSolved(placedPieces)) {
+                alert("🎉 Du løste Skygge hulens mysterie!\n(En pris burde være tilføjet til brugerens pokal menu)");
+            }
+        }
+    }, [placedPieces]); // 👈 kør hver gang placedPieces ændres
 
     return (
         <div className={style.wrapper}>
@@ -89,11 +109,13 @@ export default function DestinationPage() {
                         }}
                     />
 
-                    {/* Drop zones on silhouette */}
+                    {/* Drop zones på silhouetten */}
                     {dropZonePositions.map((pos, i) => {
                         const shadowId = `slot${i}`;
                         const pieceId = placedPieces[shadowId];
                         const piece = pieceData.find(p => p.id === pieceId);
+                        const pieceSize = pieceData[i];
+                        console.log("Rendering shadow for:", shadowId, "with piece:", pieceId);
 
                         return (
                             <PuzzleShadow
@@ -101,6 +123,8 @@ export default function DestinationPage() {
                                 id={shadowId}
                                 onDrop={handleDrop}
                                 position={pos}
+                                width={pieceSize?.width || 60}
+                                height={pieceSize?.height || 60}
                             >
                                 {piece && (
                                     <PuzzlePiece
@@ -109,20 +133,22 @@ export default function DestinationPage() {
                                         alt={piece.alt}
                                         position={pos}
                                         isInDropZone={true}
+                                        width={piece.width}
+                                        height={piece.height}
                                     />
                                 )}
                             </PuzzleShadow>
                         );
                     })}
 
-                    {/* Return area drop zone */}
+                    {/* ekstra plads til returnering af pieces */}
                     <PuzzleShadow
                         id="source"
                         onDrop={handleDrop}
                         position={{ x: 0, y: 0 }}
                     />
 
-                    {/* Puzzle pieces that haven't been placed */}
+                    {/* Puzzle pieces start positioner */}
                     {pieceData.map(piece => {
                         const isPlaced = Object.values(placedPieces).includes(piece.id);
                         if (isPlaced) return null;
