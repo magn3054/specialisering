@@ -8,6 +8,7 @@
 :root {
   font-family: "myFont", sans-serif;
   letter-spacing: 0.15rem;
+  display: flex;
 }
 
 * {

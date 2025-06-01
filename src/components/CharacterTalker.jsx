@@ -6,6 +6,7 @@ import lunaClosed from "../assets/luna-closed.svg";
 import logonOpen from "../assets/logon-open.svg";
 import logonClosed from "../assets/logon-closed.svg";
 
+// Objekt der matcher karakter-navne til åbne og lukkede mund-ikoner
 const characterImages = {
   filosofus: {
     open: filosofusOpen,
@@ -30,16 +31,19 @@ export default function CharacterTalker({
 
   useEffect(() => {
     let timer;
-    if (isTalking) {
+    if (isTalking) { 
+      // Skifter mellem åbent/lukket mund-ikon med et interval for at animere tale
       timer = setInterval(() => {
         setShowOpen(prev => !prev);
       }, interval);
     } else {
+      // Hvis karakteren ikke taler, vis lukket mund
       setShowOpen(false);
     }
     return () => clearInterval(timer);
   }, [isTalking, interval]);
 
+  // Vælg det korrekte billede ud fra om munden skal være åben eller lukket
   const talkerSrc = characterImages[baseName]?.[showOpen ? "open" : "closed"];
 
   return (

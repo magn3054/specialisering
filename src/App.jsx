@@ -15,7 +15,7 @@ const router = createBrowserRouter([
         element: <DefaultPage />,
       },
       {
-        path: "scene2",
+        path: "skygge-hulen",
         element: <Scene2 />,
       },
       {
